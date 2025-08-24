@@ -8,7 +8,8 @@ import {
 } from '../../__mocks__/handlersUtils.ts';
 import { useEventOperations } from '../../hooks/useEventOperations.ts';
 import { server } from '../../setupTests.ts';
-import { Event } from '../../types.ts';
+import { Event, EventForm } from '../../types.ts';
+import { createEventForm } from '../eventFactory.ts';
 
 const enqueueSnackbarFn = vi.fn();
 
@@ -170,4 +171,26 @@ it("네트워크 오류 시 '일정 삭제 실패'라는 텍스트가 노출되�
   expect(enqueueSnackbarFn).toHaveBeenCalledWith('일정 삭제 실패', { variant: 'error' });
 
   expect(result.current.events).toHaveLength(1);
+});
+
+it("반복 일정 추가 시 일정에 맞게 추가 일정이 생성된다", async () => {
+  setupMockHandlerCreation();
+
+  const { result } = renderHook(() => useEventOperations(false));
+
+  const event: EventForm = createEventForm({
+    title: '토요일 발제',
+    date: '2025-10-04',
+    repeat: { type: 'weekly', interval: 1, endDate: '2025-10-31' },
+  });
+
+  await act(async () => {
+    await result.current.saveEvent(event);
+  });
+
+  expect(result.current.events).toHaveLength(4);
+  expect(result.current.events[0].date).toBe('2025-10-04');
+  expect(result.current.events[1].date).toBe('2025-10-11');
+  expect(result.current.events[2].date).toBe('2025-10-18');
+  expect(result.current.events[3].date).toBe('2025-10-25');
 });
