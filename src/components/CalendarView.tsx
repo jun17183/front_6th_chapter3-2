@@ -1,6 +1,7 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import Notifications from '@mui/icons-material/Notifications';
+import Repeat from '@mui/icons-material/Repeat';
 import {
   Box,
   IconButton,
@@ -50,6 +51,7 @@ export function CalendarView({
 }: CalendarViewProps) {
   const renderEvent = (event: Event) => {
     const isNotified = notifiedEvents.includes(event.id);
+    const isRepeating = event.repeat.type !== 'none';
     return (
       <Box
         key={event.id}
@@ -67,6 +69,7 @@ export function CalendarView({
       >
         <Stack direction="row" spacing={1} alignItems="center">
           {isNotified && <Notifications fontSize="small" />}
+          {isRepeating && <Repeat fontSize="small" />}
           <Typography variant="caption" noWrap sx={{ fontSize: '0.75rem', lineHeight: 1.2 }}>
             {event.title}
           </Typography>
@@ -178,7 +181,7 @@ export function CalendarView({
   };
 
   return (
-    <Stack flex={1} spacing={5}>
+    <Stack data-testid="calendar-view" flex={1} spacing={5}>
       <Typography variant="h4">일정 보기</Typography>
 
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
