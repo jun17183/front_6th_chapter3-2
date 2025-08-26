@@ -20,11 +20,24 @@ export const setupMockHandlerCreation = (initEvents = [] as Event[]) => {
       mockEvents.push(newEvent);
       return HttpResponse.json(newEvent, { status: 201 });
     }),
+
+    http.post('/api/events-list', async ({ request }) => {
+      const newEvents = (await request.json()) as Event[];
+      const repeatId = randomUUID();
+
+      newEvents.forEach((event) => {
+        event.id = randomUUID();
+        event.repeat.id = event.repeat.type !== 'none' ? repeatId : undefined;
+      });
+      mockEvents.push(...newEvents);
+
+      return HttpResponse.json(newEvents, { status: 201 });
+    }),
   );
 };
 
-export const setupMockHandlerUpdating = () => {
-  const mockEvents: Event[] = [
+export const setupMockHandlerUpdating = (initEvents = [] as Event[]) => {
+  const mockEvents: Event[] = initEvents.length > 0 ? [...initEvents] : [
     {
       id: '1',
       title: '기존 회의',
@@ -64,11 +77,31 @@ export const setupMockHandlerUpdating = () => {
       mockEvents[index] = { ...mockEvents[index], ...updatedEvent };
       return HttpResponse.json(mockEvents[index]);
     }),
+
+    http.post('/api/events-list', async ({ request }) => {
+      const newEvents = (await request.json()) as Event[];
+      const repeatId = randomUUID();
+      
+      newEvents.forEach((event) => {
+        event.id = randomUUID();
+        event.repeat.id = event.repeat.type !== 'none' ? repeatId : undefined;
+      });
+      mockEvents.push(...newEvents);
+      return HttpResponse.json(newEvents, { status: 201 });
+    }),
+
+    http.delete('/api/events/:id', ({ params }) => {
+      const { id } = params;
+      const index = mockEvents.findIndex((event) => event.id === id);
+
+      mockEvents.splice(index, 1);
+      return new HttpResponse(null, { status: 204 });
+    })
   );
 };
 
-export const setupMockHandlerDeletion = () => {
-  const mockEvents: Event[] = [
+export const setupMockHandlerDeletion = (initEvents = [] as Event[]) => {
+  const mockEvents: Event[] = initEvents.length > 0 ? [...initEvents] : [
     {
       id: '1',
       title: '삭제할 이벤트',

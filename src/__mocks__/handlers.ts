@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { http, HttpResponse, RequestHandler } from 'msw';
 
 import { events } from '../__mocks__/response/events.json' assert { type: 'json' };
@@ -35,5 +36,14 @@ export const handlers: RequestHandler[] = [
     }
 
     return new HttpResponse(null, { status: 404 });
+  }),
+
+  http.post('/api/events-list', async ({ request }) => {
+    const newEvents = (await request.json()) as Event[];
+    newEvents.forEach((event) => {
+      event.id = randomUUID();
+    });
+    events.push(...newEvents);
+    return HttpResponse.json(newEvents, { status: 201 });
   }),
 ];
