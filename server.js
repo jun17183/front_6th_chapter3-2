@@ -74,7 +74,11 @@ app.delete('/api/events/:id', async (req, res) => {
 app.post('/api/events-list', async (req, res) => {
   const events = await getEvents();
   const repeatId = randomUUID();
-  const newEvents = req.body.events.map((event) => {
+  
+  // req.body가 배열인지 객체인지 확인하여 적절히 처리
+  const eventArray = Array.isArray(req.body) ? req.body : req.body.events || [];
+  
+  const newEvents = eventArray.map((event) => {
     const isRepeatEvent = event.repeat.type !== 'none';
     return {
       id: randomUUID(),
@@ -101,7 +105,10 @@ app.put('/api/events-list', async (req, res) => {
   let isUpdated = false;
 
   const newEvents = [...events.events];
-  req.body.events.forEach((event) => {
+  // req.body가 배열인지 객체인지 확인하여 적절히 처리
+  const eventArray = Array.isArray(req.body) ? req.body : req.body.events || [];
+  
+  eventArray.forEach((event) => {
     const eventIndex = events.events.findIndex((target) => target.id === event.id);
     if (eventIndex > -1) {
       isUpdated = true;
@@ -125,7 +132,9 @@ app.put('/api/events-list', async (req, res) => {
 
 app.delete('/api/events-list', async (req, res) => {
   const events = await getEvents();
-  const newEvents = events.events.filter((event) => !req.body.eventIds.includes(event.id)); // ? ids를 전달하면 해당 아이디를 기준으로 events에서 제거
+  // req.body가 배열인지 객체인지 확인하여 적절히 처리
+  const eventIds = Array.isArray(req.body) ? req.body : req.body.eventIds || [];
+  const newEvents = events.events.filter((event) => !eventIds.includes(event.id));
 
   fs.writeFileSync(
     `${__dirname}/src/__mocks__/response/realEvents.json`,
