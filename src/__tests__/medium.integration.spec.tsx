@@ -346,12 +346,24 @@ describe('반복 일정 표시', () => {
   afterEach(() => {
     server.resetHandlers();
   });
-  
+
   it('반복 일정이 있는 경우 반복 아이콘이 표시된다', async () => {
     const events = createEvents([
-      { title: '반복 일정', date: '2025-10-15', repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' } },
-      { title: '반복 일정', date: '2025-10-16', repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' } },
-      { title: '반복 일정', date: '2025-10-17', repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' } },
+      {
+        title: '반복 일정',
+        date: '2025-10-15',
+        repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' },
+      },
+      {
+        title: '반복 일정',
+        date: '2025-10-16',
+        repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' },
+      },
+      {
+        title: '반복 일정',
+        date: '2025-10-17',
+        repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' },
+      },
     ]);
 
     setupMockHandlerCreation(events);
@@ -366,9 +378,23 @@ describe('반복 일정 표시', () => {
     vi.setSystemTime(new Date('2025-10-15 08:49:59'));
 
     const events = createEvents([
-      { title: '반복 일정', date: '2025-10-15', startTime: '09:00', notificationTime: 10, repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' } },
-      { title: '반복 일정', date: '2025-10-16', repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' } },
-      { title: '반복 일정', date: '2025-10-17', repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' } },
+      {
+        title: '반복 일정',
+        date: '2025-10-15',
+        startTime: '09:00',
+        notificationTime: 10,
+        repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' },
+      },
+      {
+        title: '반복 일정',
+        date: '2025-10-16',
+        repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' },
+      },
+      {
+        title: '반복 일정',
+        date: '2025-10-17',
+        repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-17' },
+      },
     ]);
 
     setupMockHandlerCreation(events);
@@ -384,6 +410,6 @@ describe('반복 일정 표시', () => {
     expect(repeatIcons).toHaveLength(3);
 
     const notificationIcons = await screen.findAllByTestId('NotificationsIcon');
-    expect(notificationIcons).toHaveLength(2);  // 달력, 이벤트 리스트까지 2개개
+    expect(notificationIcons).toHaveLength(2); // 달력, 이벤트 리스트까지 2개
   });
 });

@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+
 import { http, HttpResponse, RequestHandler } from 'msw';
 
 import { events } from '../__mocks__/response/events.json' assert { type: 'json' };

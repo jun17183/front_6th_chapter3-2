@@ -2,9 +2,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
 import { Event, EventForm } from '../types';
-import { 
-  generateRepeatEvents
-} from '../utils/eventUtils';
+import { generateRepeatEvents } from '../utils/eventUtils';
 
 export const useEventOperations = (editing: boolean, onSave?: () => void) => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -28,7 +26,6 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
     try {
       let response;
       if (editing) {
-        
         if (eventData.repeat.type !== 'none') {
           const copyData = { ...eventData } as Event;
           const repeatEvents = generateRepeatEvents(copyData);
@@ -45,9 +42,9 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
           const repeatEvents = generateRepeatEvents(eventData);
           const allEvents = [eventData, ...repeatEvents];
 
-          response = await addEvents(allEvents);
+          await addEvents(allEvents);
         } else {
-          response = await addEvent(eventData);
+          await addEvent(eventData);
         }
       }
 
@@ -92,7 +89,7 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
   const addEvents = async (events: (Event | EventForm)[] | Event | EventForm) => {
     // 단일 이벤트면 배열로 변환, 배열이면 그대로 사용
     const eventArray = Array.isArray(events) ? events : [events];
-    
+
     if (eventArray.length === 0) return;
 
     const response = await fetch('/api/events-list', {
@@ -132,10 +129,10 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { 
-    events, 
-    fetchEvents, 
-    saveEvent, 
-    deleteEvent 
+  return {
+    events,
+    fetchEvents,
+    saveEvent,
+    deleteEvent,
   };
 };

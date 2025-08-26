@@ -74,10 +74,10 @@ app.delete('/api/events/:id', async (req, res) => {
 app.post('/api/events-list', async (req, res) => {
   const events = await getEvents();
   const repeatId = randomUUID();
-  
+
   // req.body가 배열인지 객체인지 확인하여 적절히 처리
   const eventArray = Array.isArray(req.body) ? req.body : req.body.events || [];
-  
+
   const newEvents = eventArray.map((event) => {
     const isRepeatEvent = event.repeat.type !== 'none';
     return {
@@ -107,7 +107,7 @@ app.put('/api/events-list', async (req, res) => {
   const newEvents = [...events.events];
   // req.body가 배열인지 객체인지 확인하여 적절히 처리
   const eventArray = Array.isArray(req.body) ? req.body : req.body.events || [];
-  
+
   eventArray.forEach((event) => {
     const eventIndex = events.events.findIndex((target) => target.id === event.id);
     if (eventIndex > -1) {

@@ -31,9 +31,9 @@ const notificationOptions = [
 
 interface EventFormProps {
   events: Event[];
-  onOverlapDetected: (overlappingEvents: Event[], eventData: Event | EventFormType) => void;
+  onOverlapDetected: (_overlappingEvents: Event[], _eventData: Event | EventFormType) => void;
   onEventSaved: () => void;
-  saveEvent: (eventData: Event | EventFormType) => Promise<void>;
+  saveEvent: (_eventData: Event | EventFormType) => Promise<void>;
   editingEvent: Event | null;
   setEditingEvent: (event: Event | null) => void;
 }
@@ -253,12 +253,7 @@ export function EventForm({
 
       <FormControl>
         <FormControlLabel
-          control={
-            <Checkbox
-              checked={isRepeating}
-              onChange={handleIsRepeatingChange}
-            />
-          }
+          control={<Checkbox checked={isRepeating} onChange={handleIsRepeatingChange} />}
           label="반복 일정"
         />
       </FormControl>

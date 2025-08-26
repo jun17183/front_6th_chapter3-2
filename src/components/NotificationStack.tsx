@@ -18,13 +18,13 @@ export function NotificationStack({ notifications, onRemoveNotification }: Notif
 
   return (
     <Stack position="fixed" top={16} right={16} spacing={2} alignItems="flex-end">
-      {notifications.map((notification, index) => (
+      {notifications.map((notification, _index) => (
         <Alert
-          key={index}
+          key={_index}
           severity="info"
           sx={{ width: 'auto' }}
           action={
-            <IconButton size="small" onClick={() => onRemoveNotification(index)}>
+            <IconButton size="small" onClick={() => onRemoveNotification(_index)}>
               <Close />
             </IconButton>
           }

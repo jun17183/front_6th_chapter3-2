@@ -175,7 +175,7 @@ it("네트워크 오류 시 '일정 삭제 실패'라는 텍스트가 노출되�
 
 // =========== 반복 일정 추가 테스트 ===========
 
-it("반복 일정 추가 시 반복 주기에 맞게 추가 일정이 생성된다", async () => {
+it('반복 일정 추가 시 반복 주기에 맞게 추가 일정이 생성된다', async () => {
   setupMockHandlerCreation();
 
   const { result } = renderHook(() => useEventOperations(false));
@@ -197,7 +197,7 @@ it("반복 일정 추가 시 반복 주기에 맞게 추가 일정이 생성된�
   expect(result.current.events[1].date).toBe('2025-10-11');
   expect(result.current.events[2].date).toBe('2025-10-18');
   expect(result.current.events[3].date).toBe('2025-10-25');
-  
+
   expect(result.current.events[1].repeat?.id).toBe(repeatId);
   expect(result.current.events[2].repeat?.id).toBe(repeatId);
   expect(result.current.events[3].repeat?.id).toBe(repeatId);
@@ -261,7 +261,7 @@ it('반복 일정을 단일 일정으로 수정 시 해당 일정만 수정된�
       repeat: { id: '1', type: 'daily', interval: 1, endDate: '2025-10-03' },
     },
   ]);
-  
+
   setupMockHandlerUpdating(events);
 
   const { result } = renderHook(() => useEventOperations(true));
@@ -354,9 +354,9 @@ it('반복 일정의 반복 정보를 수정 시 새 반복 일정이 생성되�
   expect(result.current.events[2].repeat?.type).toBe('weekly');
   expect(result.current.events[3].repeat?.type).toBe('weekly');
   expect(result.current.events[4].repeat?.type).toBe('weekly');
-  
+
   const newRepeatId = result.current.events[2].repeat?.id;
-  
+
   expect(result.current.events[3].repeat?.id).toBe(newRepeatId);
   expect(result.current.events[4].repeat?.id).toBe(newRepeatId);
 });

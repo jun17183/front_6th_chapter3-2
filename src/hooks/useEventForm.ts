@@ -14,7 +14,7 @@ export const useEventForm = (initialEvent?: Event) => {
   const [location, setLocation] = useState(initialEvent?.location || '');
   const [category, setCategory] = useState(initialEvent?.category || '업무');
   const [isRepeating, setIsRepeating] = useState(
-    initialEvent ? initialEvent?.repeat.type !== 'none' : false,
+    initialEvent ? initialEvent?.repeat.type !== 'none' : false
   );
   const [repeatType, setRepeatType] = useState<RepeatType>(initialEvent?.repeat.type || 'none');
   const [repeatInterval, setRepeatInterval] = useState(initialEvent?.repeat.interval || 1);

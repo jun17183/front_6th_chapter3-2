@@ -21,7 +21,7 @@ interface OverlapDialogProps {
 export function OverlapDialog({
   open,
   overlappingEvents,
-  eventData,
+  eventData: _eventData,
   onClose,
   onConfirm,
 }: OverlapDialogProps) {

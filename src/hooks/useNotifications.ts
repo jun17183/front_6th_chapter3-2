@@ -29,7 +29,7 @@ export const useNotifications = (events: Event[]) => {
   useEffect(() => {
     const interval = setInterval(checkUpcomingEvents, 1000); // 1초마다 체크
     return () => clearInterval(interval);
-  }, [events, notifiedEvents]);
+  }, [events, notifiedEvents, checkUpcomingEvents]);
 
   return { notifications, notifiedEvents, setNotifications, removeNotification };
 };
