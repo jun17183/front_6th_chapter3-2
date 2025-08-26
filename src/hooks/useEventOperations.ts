@@ -24,14 +24,13 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
 
   const saveEvent = async (eventData: Event | EventForm) => {
     try {
-      let response;
       if (editing) {
         if (eventData.repeat.type !== 'none') {
           const copyData = { ...eventData } as Event;
           const repeatEvents = generateRepeatEvents(copyData);
 
           await deleteEvent(copyData.id);
-          response = await addEvents([copyData, ...repeatEvents]);
+          await addEvents([copyData, ...repeatEvents]);
         } else {
           // 반복 설정이 없으면 repeat 초기화해서 수정
           await updateEvent({ ...eventData, repeat: { type: 'none', interval: 0 } } as Event);

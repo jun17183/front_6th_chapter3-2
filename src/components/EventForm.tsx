@@ -31,9 +31,9 @@ const notificationOptions = [
 
 interface EventFormProps {
   events: Event[];
-  onOverlapDetected: (_overlappingEvents: Event[], _eventData: Event | EventFormType) => void;
+  onOverlapDetected: (overlapping: Event[], eventData: Event | EventFormType) => void;
   onEventSaved: () => void;
-  saveEvent: (_eventData: Event | EventFormType) => Promise<void>;
+  saveEvent: (eventData: Event | EventFormType) => Promise<void>;
   editingEvent: Event | null;
   setEditingEvent: (event: Event | null) => void;
 }
