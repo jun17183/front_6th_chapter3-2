@@ -1,5 +1,10 @@
 import { Event } from '../../types';
 import {
+  addDays,
+  addWeeks,
+  addMonths,
+  addYears,
+  getNextDate,
   fillZero,
   formatDate,
   formatMonth,
@@ -296,5 +301,84 @@ describe('formatDate', () => {
   it('일이 한 자리 수일 때 앞에 0을 붙여 포맷팅한다', () => {
     const testDate = new Date('2023-12-05');
     expect(formatDate(testDate)).toBe('2023-12-05');
+  });
+});
+
+describe('addDays', () => {
+  it('날짜에 양수 일수를 더한다', () => {
+    const date = new Date('2025-07-01');
+    const result = addDays(date, 5);
+    expect(result.toISOString().split('T')[0]).toBe('2025-07-06');
+  });
+
+  it('날짜에 음수 일수를 더한다', () => {
+    const date = new Date('2025-07-10');
+    const result = addDays(date, -3);
+    expect(result.toISOString().split('T')[0]).toBe('2025-07-07');
+  });
+});
+
+describe('addWeeks', () => {
+  it('날짜에 주를 더한다', () => {
+    const date = new Date('2025-07-01');
+    const result = addWeeks(date, 2);
+    expect(result.toISOString().split('T')[0]).toBe('2025-07-15');
+  });
+});
+
+describe('addMonths', () => {
+  it('날짜에 개월을 더한다', () => {
+    const date = new Date('2025-07-15');
+    const result = addMonths(date, 2);
+    expect(result.toISOString().split('T')[0]).toBe('2025-09-15');
+  });
+
+  it('월말 날짜를 올바르게 처리한다', () => {
+    const date = new Date('2025-01-31');
+    const result = addMonths(date, 1);
+    expect(result.toISOString().split('T')[0]).toBe('2025-03-31');
+  });
+});
+
+describe('addYears', () => {
+  it('날짜에 년을 더한다', () => {
+    const date = new Date('2025-07-01');
+    const result = addYears(date, 3);
+    expect(result.toISOString().split('T')[0]).toBe('2028-07-01');
+  });
+
+  it('윤년 2월 29일을 올바르게 처리한다', () => {
+    const date = new Date('2024-02-29');
+    const result = addYears(date, 1);
+    expect(result.toISOString().split('T')[0]).toBe('2028-02-29');
+  });
+});
+
+describe('getNextDate', () => {
+  const baseDate = new Date('2025-07-01');
+
+  it('daily 반복에 대해 올바른 날짜를 반환한다', () => {
+    const result = getNextDate(baseDate, 'daily', 1);
+    expect(result.toISOString().split('T')[0]).toBe('2025-07-02');
+  });
+
+  it('weekly 반복에 대해 올바른 날짜를 반환한다', () => {
+    const result = getNextDate(baseDate, 'weekly', 1);
+    expect(result.toISOString().split('T')[0]).toBe('2025-07-08');
+  });
+
+  it('monthly 반복에 대해 올바른 날짜를 반환한다', () => {
+    const result = getNextDate(baseDate, 'monthly', 1);
+    expect(result.toISOString().split('T')[0]).toBe('2025-08-01');
+  });
+
+  it('yearly 반복에 대해 올바른 날짜를 반환한다', () => {
+    const result = getNextDate(baseDate, 'yearly', 1);
+    expect(result.toISOString().split('T')[0]).toBe('2026-07-01');
+  });
+
+  it('알 수 없는 반복 타입에 대해 현재 날짜를 반환한다', () => {
+    const result = getNextDate(baseDate, 'unknown', 1);
+    expect(result).toEqual(baseDate);
   });
 });

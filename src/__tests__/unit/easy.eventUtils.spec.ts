@@ -1,5 +1,5 @@
-import { Event } from '../../types';
-import { getFilteredEvents } from '../../utils/eventUtils';
+import { Event, RepeatType } from '../../types';
+import { getFilteredEvents, generateRepeatDates, generateRepeatEvents } from '../../utils/eventUtils';
 
 describe('getFilteredEvents', () => {
   const events: Event[] = [
@@ -112,5 +112,81 @@ describe('getFilteredEvents', () => {
   it('빈 이벤트 리스트에 대해 빈 배열을 반환한다', () => {
     const result = getFilteredEvents([], '', new Date('2025-07-01'), 'month');
     expect(result).toHaveLength(0);
+  });
+});
+
+describe('generateRepeatDates', () => {
+  it('반복이 없을 때 시작 날짜만 반환한다', () => {
+    const result = generateRepeatDates('2025-07-01', { type: 'none', interval: 0 });
+    expect(result).toEqual(['2025-07-01']);
+  });
+
+  it('일간 반복에 대해 올바른 날짜들을 생성한다', () => {
+    const result = generateRepeatDates('2025-07-01', { type: 'daily', interval: 1 });
+    expect(result).toContain('2025-07-01');
+    expect(result).toContain('2025-07-02');
+    expect(result).toContain('2025-07-03');
+  });
+
+  it('주간 반복에 대해 올바른 날짜들을 생성한다', () => {
+    const result = generateRepeatDates('2025-07-01', { type: 'weekly', interval: 1 });
+    expect(result).toContain('2025-07-01');
+    expect(result).toContain('2025-07-08');
+    expect(result).toContain('2025-07-15');
+  });
+
+  it('월간 반복에 대해 올바른 날짜들을 생성한다', () => {
+    const result = generateRepeatDates('2025-07-01', { type: 'monthly', interval: 1 });
+    expect(result).toContain('2025-07-01');
+    expect(result).toContain('2025-08-01');
+    expect(result).toContain('2025-09-01');
+  });
+
+  it('년간 반복에 대해 올바른 날짜들을 생성한다', () => {
+    const result = generateRepeatDates('2025-07-01', { type: 'yearly', interval: 1 });
+    expect(result).toContain('2025-07-01');
+    // 년간 반복은 기본 endDate(2025-10-30)까지 생성되므로 2026년 이후는 생성되지 않음
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('interval이 2인 경우 올바른 간격으로 날짜를 생성한다', () => {
+    const result = generateRepeatDates('2025-07-01', { type: 'weekly', interval: 2 });
+    expect(result).toContain('2025-07-01');
+    expect(result).toContain('2025-07-15');
+    expect(result).toContain('2025-07-29');
+  });
+});
+
+describe('generateRepeatEvents', () => {
+  const baseEvent: Event = {
+    id: '1',
+    title: '반복 이벤트',
+    date: '2025-07-01',
+    startTime: '10:00',
+    endTime: '11:00',
+    description: '테스트 이벤트',
+    location: '회의실',
+    category: '회의',
+    repeat: { type: 'weekly' as RepeatType, interval: 1 },
+    notificationTime: 10,
+  };
+
+  it('반복 일정을 생성하고 기준 일정은 제외한다', () => {
+    const result = generateRepeatEvents(baseEvent);
+    expect(result.length).toBeGreaterThan(0);
+    expect(result[0].title).toBe('반복 이벤트');
+    expect(result[0].date).not.toBe('2025-07-01');
+  });
+
+  it('반복이 없을 때 빈 배열을 반환한다', () => {
+    const noRepeatEvent = { ...baseEvent, repeat: { type: 'none' as RepeatType, interval: 0 } };
+    const result = generateRepeatEvents(noRepeatEvent);
+    expect(result).toHaveLength(0);
+  });
+
+  it('생성된 이벤트들이 올바른 날짜를 가진다', () => {
+    const result = generateRepeatEvents(baseEvent);
+    expect(result[0].date).toBe('2025-07-08');
+    expect(result[1].date).toBe('2025-07-15');
   });
 });
