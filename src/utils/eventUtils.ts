@@ -48,7 +48,10 @@ export function generateRepeatDates(startDate: string, repeat: RepeatInfo): stri
   let currentDate = new Date(startDate);
 
   // endDate 설정 (기본값: 2025-10-30)
-  const endDate = repeat.endDate && new Date(repeat.endDate) < new Date('2025-10-30') ? new Date(repeat.endDate) : new Date('2025-10-30');
+  const endDate =
+    repeat.endDate && new Date(repeat.endDate) < new Date('2025-10-30')
+      ? new Date(repeat.endDate)
+      : new Date('2025-10-30');
 
   while (true) {
     const nextDate = getNextDate(currentDate, repeat.type, repeat.interval);
