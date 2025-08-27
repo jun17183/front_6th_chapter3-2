@@ -1,5 +1,9 @@
 import { Event, RepeatType } from '../../types';
-import { getFilteredEvents, generateRepeatDates, generateRepeatEvents } from '../../utils/eventUtils';
+import {
+  getFilteredEvents,
+  generateRepeatDates,
+  generateRepeatEvents,
+} from '../../utils/eventUtils';
 
 describe('getFilteredEvents', () => {
   const events: Event[] = [
